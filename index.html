@@ -25,6 +25,28 @@
       <div class="paper">
         <div class="paper-label">오늘의 질문</div>
         <p id="question" class="question"></p>
+      <div class="free-panel" id="freePanel">
+        <div class="paper-label">자유질문</div>
+        <div id="freeSetup">
+          <p class="free-q">오늘 함께하는 사람은 몇 명인가요?</p>
+          <div class="stepper">
+            <button type="button" id="minus" class="step" aria-label="한 명 줄이기">−</button>
+            <input id="people" type="number" min="2" max="12" value="4" inputmode="numeric" aria-label="인원 수">
+            <button type="button" id="plus" class="step" aria-label="한 명 늘리기">+</button>
+          </div>
+          <p class="free-note">2명부터 12명까지 가능해요.</p>
+          <button type="button" id="makeWheel" class="btn btn-go">돌림판 만들기</button>
+        </div>
+        <div id="freeWheel" hidden>
+          <div class="wheel-wrap">
+            <div class="pointer" id="pointer"></div>
+            <button type="button" id="wheelHit" class="wheel-hit" aria-label="돌림판 돌리기"><canvas id="wheel" style="width:230px;height:230px"></canvas></button>
+          </div>
+          <ul class="legend" id="legend"></ul>
+          <p class="result" id="result"></p>
+          <button type="button" id="redo" class="btn btn-small">인원 다시 정하기</button>
+        </div>
+      </div>
       </div>
       <div class="cover" id="cover"></div>
       <div class="flap" id="flap"></div>
