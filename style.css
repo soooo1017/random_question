@@ -82,9 +82,11 @@ h1 b {
 /* 뽑기판 */
 .board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  grid-template-columns: repeat(8, 1fr); /* 80칸 = 세로 10줄 x 가로 8칸 */
   gap: 2px 1px;
-  padding: 2px;
+}
+@media (min-width: 600px) {
+  .board { grid-template-columns: repeat(10, 1fr); } /* 넓은 화면: 가로 10칸 x 세로 8줄 */
 }
 .ticket {
   position: relative;
@@ -108,7 +110,9 @@ h1 b {
   background: repeating-linear-gradient(90deg, #fff 0 3px, transparent 3px 6px);
   opacity: .5;
 }
-.ticket:hover { transform: translateY(-2px) scale(1.06); z-index: 2; }
+@media (hover: hover) {
+  .ticket:hover { transform: translateY(-2px) scale(1.06); z-index: 2; }
+}
 .ticket.gone { visibility: hidden; pointer-events: none; }
 .empty { text-align: center; font-weight: 700; margin: 16px 0 0; }
 
@@ -216,10 +220,6 @@ h1 b {
 .btn-back { opacity: 0; transition: opacity .3s; }
 .btn-back.show { opacity: 1; }
 
-@media (max-width: 480px) {
-  body { padding: 8px; }
-  .board { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
-}
 
 .big { cursor: pointer; }
 .big.torn { cursor: default; }
@@ -236,7 +236,7 @@ h1 b {
 /* 자유질문 */
 .stage { overflow-y: auto; justify-content: safe center; }
 .big.free { width: min(92vw, 380px); aspect-ratio: auto; }
-.big.free .paper { position: relative; min-height: 470px; padding: 18px 14px; }
+.big.free .paper { position: relative; padding: 18px 14px; }
 .big.free .paper-label, .big.free .question { display: none; }
 .free-panel { display: none; width: 100%; flex-direction: column; align-items: center; gap: 10px; opacity: 0; transition: opacity .4s .25s; }
 .big.free .free-panel { display: flex; }
@@ -251,11 +251,11 @@ h1 b {
 #people { width: 84px; height: 54px; text-align: center; font: inherit; font-size: 30px; font-weight: 800; border: 3px solid #222; border-radius: 10px; background: #fff; color: #222; }
 .btn-go { background: var(--yellow); font-size: 18px; padding: 10px 22px; }
 .btn-small { padding: 5px 12px; font-size: 13px; box-shadow: 0 2px 0 #222; }
-.wheel-wrap { position: relative; width: 230px; height: 244px; padding-top: 14px; }
+.wheel-wrap { position: relative; width: 250px; height: 264px; padding-top: 14px; }
 .wheel-hit { display: block; padding: 0; border: 0; background: none; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,.3); }
 .wheel-hit canvas { display: block; border-radius: 50%; }
 .wheel-hit:focus-visible { outline: 3px solid #ff3d8b; outline-offset: 3px; }
-.pointer { position: absolute; top: 0; left: 50%; margin-left: -12px; width: 0; height: 0; z-index: 2; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 26px solid #222; transform-origin: 50% 0; transition: transform .08s; }
+.pointer { position: absolute; top: 0; left: 50%; margin-left: -12px; width: 0; height: 0; z-index: 2; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 26px solid #222; pointer-events: none; transform-origin: 50% 0; transition: transform .08s; }
 .pointer.flick { animation: flick .09s; }
 @keyframes flick { 50% { transform: rotate(-22deg); } }
 .legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 8px; }
@@ -264,3 +264,13 @@ h1 b {
 .legend i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #222; }
 .result { margin: 0; min-height: 3em; font-size: 15px; font-weight: 700; word-break: keep-all; }
 .result b { font-size: 20px; }
+
+/* 누르기 쉬운 크기: 버튼은 높이 44px 이상 */
+.btn-reset, .confirm .btn, .btn-small { min-height: 44px; }
+.btn-back { min-height: 52px; }
+/* 뜯긴 표지가 아래 버튼을 가리지 않게 한다 */
+.big.tear .cover, .big.tear .flap { pointer-events: none; }
+/* 좁은 화면에서는 포스터 여백을 줄여 칸을 조금 더 크게 */
+@media (max-width: 480px) {
+  .poster { padding: 12px 8px 16px; }
+}

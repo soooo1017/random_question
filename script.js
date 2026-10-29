@@ -155,7 +155,7 @@
   const $pointer = document.getElementById("pointer");
   const $legend = document.getElementById("legend");
   const $result = document.getElementById("result");
-  const SIZE = 230;
+  const SIZE = 250;
   let count = 4, rotation = 0, spinning = false, audio = null;
 
   function clampPeople() {
