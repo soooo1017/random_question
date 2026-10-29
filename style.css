@@ -1,0 +1,222 @@
+:root {
+  --blue: #1f4fb5;
+  --blue-dark: #153a8c;
+  --yellow: #ffd92e;
+  --poster: #ffe23a;
+  --ink: #2b2b2b;
+  --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,8 61,36 92,38 68,57 76,88 50,71 24,88 32,57 8,38 39,36' fill='%23ffd92e' stroke='%23e6a800' stroke-width='3' stroke-linejoin='round'/%3E%3Ccircle cx='42' cy='50' r='3' fill='%237a5200'/%3E%3Ccircle cx='58' cy='50' r='3' fill='%237a5200'/%3E%3Cpath d='M42 60 Q50 67 58 60' stroke='%237a5200' fill='none' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  --zigzag: polygon(0 0, 100% 0, 100% 78%, 92% 100%, 84% 72%, 76% 100%, 68% 74%, 60% 100%, 52% 70%, 44% 100%, 36% 74%, 28% 100%, 20% 72%, 12% 100%, 4% 76%, 0 92%);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #e9edf2;
+  font-family: "Pretendard", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* 포스터 */
+.poster {
+  width: 100%;
+  max-width: 760px;
+  background: var(--poster);
+  border-radius: 10px;
+  padding: 16px 14px 20px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+}
+.poster-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(28px, 7vw, 44px);
+  line-height: 1;
+  letter-spacing: -1px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+h1 span {
+  color: #fff;
+  -webkit-text-stroke: 5px #222;
+  paint-order: stroke fill;
+}
+h1 b {
+  font-size: 1.35em;
+  color: #ff3d8b;
+  -webkit-text-stroke: 6px #222;
+  paint-order: stroke fill;
+}
+.controls { display: flex; align-items: center; gap: 10px; }
+.remaining {
+  background: #fff;
+  border: 2px solid #222;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 14px;
+}
+.hint { margin: 10px 0 12px; font-size: 14px; }
+
+.btn {
+  font: inherit;
+  font-weight: 700;
+  border: 3px solid #222;
+  border-radius: 10px;
+  padding: 8px 16px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #222;
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #222; }
+.btn-reset { background: #ff5a5a; color: #fff; }
+.btn-back { background: var(--yellow); font-size: 18px; padding: 12px 24px; }
+
+/* 뽑기판 */
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  gap: 2px 1px;
+  padding: 2px;
+}
+.ticket {
+  position: relative;
+  aspect-ratio: 1 / 1.05;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background:
+    var(--star) center 58% / 70% no-repeat,
+    linear-gradient(#2a5fd0, var(--blue-dark));
+  border-top: 3px solid #b9cdf7;
+  border-bottom: 2px solid #0d2a6b;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25);
+  transition: transform .12s;
+}
+.ticket::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 14%;
+  background: repeating-linear-gradient(90deg, #fff 0 3px, transparent 3px 6px);
+  opacity: .5;
+}
+.ticket:hover { transform: translateY(-2px) scale(1.06); z-index: 2; }
+.ticket.gone { visibility: hidden; pointer-events: none; }
+.empty { text-align: center; font-weight: 700; margin: 16px 0 0; }
+
+/* 뽑기 연출 */
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(10, 15, 30, .72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 16px;
+  opacity: 0;
+  transition: opacity .25s;
+}
+.stage.open { opacity: 1; }
+.stage[hidden] { display: none; }
+
+.big {
+  position: relative;
+  width: min(80vw, 340px);
+  aspect-ratio: 1 / 1.1;
+  transform-origin: top left;
+}
+.paper {
+  position: absolute;
+  inset: 0;
+  background: #fffdf3;
+  border: 4px solid #222;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  text-align: center;
+  background-image: repeating-linear-gradient(transparent 0 31px, #e8e2c8 31px 32px);
+}
+.paper-label {
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+.question {
+  margin: 0;
+  font-size: clamp(20px, 5.4vw, 26px);
+  font-weight: 800;
+  line-height: 1.5;
+  word-break: keep-all;
+  opacity: 0;
+  transform: scale(.9);
+  transition: opacity .4s .25s, transform .4s .25s;
+}
+.big.torn .question { opacity: 1; transform: none; }
+
+.cover, .flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background:
+    var(--star) center 62% / 55% no-repeat,
+    linear-gradient(#2a5fd0, var(--blue-dark));
+  border: 4px solid #0d2a6b;
+}
+.cover {
+  top: 0;
+  bottom: 0;
+  transform-origin: bottom left;
+  transition: transform .7s cubic-bezier(.5, 0, .9, .5), opacity .7s;
+}
+.flap {
+  top: 0;
+  height: 24%;
+  background: linear-gradient(#5b86e5, #2a5fd0);
+  clip-path: var(--zigzag);
+  border-bottom: 0;
+  transform-origin: top right;
+  transition: transform .55s cubic-bezier(.4, 0, .8, .4), opacity .55s;
+  z-index: 2;
+}
+.flap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 5px, transparent 5px 10px);
+  height: 30%;
+}
+/* 상단 띠 먼저 뜯기고, 이어서 본체가 벗겨진다 */
+.big.tear .flap { transform: translate(14%, -60%) rotate(32deg); opacity: 0; }
+.big.tear .cover { transition-delay: .35s; transform: translate(-30%, 40%) rotate(-24deg); opacity: 0; }
+.big.tear.shake { animation: shake .35s; }
+@keyframes shake {
+  0%, 100% { translate: 0; }
+  25% { translate: -4px 2px; }
+  50% { translate: 4px -2px; }
+  75% { translate: -3px 1px; }
+}
+.btn-back { opacity: 0; transition: opacity .3s; }
+.btn-back.show { opacity: 1; }
+
+@media (max-width: 480px) {
+  body { padding: 8px; }
+  .board { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
+}

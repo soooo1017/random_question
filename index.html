@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>추억의 뽑기 - 질문 뽑기판</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="poster">
+    <header class="poster-head">
+      <h1><span>추억의</span><b>뽑기</b></h1>
+      <div class="controls">
+        <span class="remaining">남은 뽑기 <strong id="remaining">0</strong>개</span>
+        <button type="button" id="reset" class="btn btn-reset">초기화</button>
+      </div>
+    </header>
+    <p class="hint">하나를 골라 뜯어보세요! 나온 질문으로 이야기를 나눠요 🙂</p>
+    <section id="board" class="board" aria-label="뽑기판"></section>
+    <p id="empty" class="empty" hidden>모든 뽑기를 다 뽑았어요! 🎉 "초기화"를 눌러 다시 시작하세요.</p>
+  </main>
+
+  <div id="stage" class="stage" hidden aria-modal="true" role="dialog" aria-label="뽑은 질문">
+    <div class="big" id="big">
+      <div class="paper">
+        <div class="paper-label">오늘의 질문</div>
+        <p id="question" class="question"></p>
+      </div>
+      <div class="cover" id="cover"></div>
+      <div class="flap" id="flap"></div>
+    </div>
+    <button type="button" id="back" class="btn btn-back" hidden>뽑기판으로</button>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
