@@ -220,3 +220,15 @@ h1 b {
   body { padding: 8px; }
   .board { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
 }
+
+.big { cursor: pointer; }
+.big.torn { cursor: default; }
+.big.ready { animation: wiggle 1.1s ease-in-out infinite; }
+@keyframes wiggle {
+  0%, 100% { rotate: 0deg; scale: 1; }
+  25% { rotate: -2deg; scale: 1.02; }
+  75% { rotate: 2deg; scale: 1.02; }
+}
+.tap-hint { margin: 0; color: #fff; font-weight: 800; font-size: 18px; animation: pulse 1.1s ease-in-out infinite; }
+.tap-hint.gone { display: none; }
+@keyframes pulse { 50% { opacity: .45; } }

@@ -9,10 +9,12 @@
   const $big = document.getElementById("big");
   const $question = document.getElementById("question");
   const $back = document.getElementById("back");
+  const $hint = document.getElementById("tapHint");
 
   const signature = JSON.stringify(questions);
   let state = load() || newState();
   let busy = false;
+  let canTear = false;
 
   function shuffle(arr) {
     const a = arr.slice();
@@ -86,13 +88,26 @@
       $big.style.transform = "none";
     });
 
-    setTimeout(() => $big.classList.add("shake"), 600);
-    setTimeout(() => $big.classList.add("tear"), 900);
-    setTimeout(() => $big.classList.add("torn"), 1300);
+    // 커진 뽑기는 직접 눌러야 뜯어진다
+    $hint.classList.remove("gone");
+    setTimeout(() => {
+      $big.classList.add("ready");
+      canTear = true;
+    }, 600);
+  }
+
+  function tear() {
+    if (!canTear) return;
+    canTear = false;
+    $hint.classList.add("gone");
+    $big.classList.remove("ready");
+    $big.classList.add("shake");
+    setTimeout(() => $big.classList.add("tear"), 300);
+    setTimeout(() => $big.classList.add("torn"), 700);
     setTimeout(() => {
       $back.hidden = false;
       requestAnimationFrame(() => $back.classList.add("show"));
-    }, 1700);
+    }, 1100);
   }
 
   function closeStage() {
@@ -107,8 +122,12 @@
   }
 
   $back.addEventListener("click", closeStage);
+  $big.addEventListener("click", tear);
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape" || e.key === "Enter") closeStage();
+    if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+      if (canTear) { if (e.key !== "Escape") { e.preventDefault(); tear(); } }
+      else closeStage();
+    }
   });
 
   document.getElementById("reset").addEventListener("click", () => {
